@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Unique identifier for this launchd agent -->
+  <key>Label</key>
+  <string>com.frigate.coordinator</string>
+
+  <!-- Path to the installed binary and its arguments -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/frigate-coordinator</string>
+    <string>--config</string>
+    <string>/usr/local/etc/frigate-coordinator/config.yaml</string>
+  </array>
+
+  <!-- Start automatically when the user logs in -->
+  <key>RunAtLoad</key>
+  <true/>
+
+  <!-- Restart automatically if the process crashes -->
+  <key>KeepAlive</key>
+  <true/>
+
+  <!-- Redirect stdout and stderr to log files -->
+  <key>StandardOutPath</key>
+  <string>/usr/local/var/log/frigate-coordinator.log</string>
+  <key>StandardErrorPath</key>
+  <string>/usr/local/var/log/frigate-coordinator.error.log</string>
+
+  <!-- Ensure the IPC directory exists before the process starts -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/YOUR_USERNAME</string>
+  </dict>
+</dict>
+</plist>

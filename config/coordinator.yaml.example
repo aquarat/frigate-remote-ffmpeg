@@ -1,0 +1,41 @@
+# frigate-coordinator configuration
+# Copy to /usr/local/etc/frigate-coordinator/config.yaml and edit to suit.
+
+# Absolute path to the native macOS ffmpeg binary.
+# Install via Homebrew: brew install ffmpeg
+ffmpeg_path: /opt/homebrew/bin/ffmpeg
+ffprobe_path: /opt/homebrew/bin/ffprobe
+
+# TCP address the coordinator listens on. Bind to loopback so it is not
+# reachable from outside the host. The Docker container reaches the host
+# via host.docker.internal, which Docker Desktop maps to this loopback.
+listen_addr: 127.0.0.1:17346
+
+# Log verbosity: debug | info | warn | error
+log_level: info
+
+# Path mappings translate container-side absolute paths to host-side paths.
+# Each entry is a (container, host) prefix pair; the first match wins.
+#
+# Example: Frigate stores recordings at /media/frigate inside the container.
+# If the host volume is mounted at /Users/you/frigate/media, add:
+#
+#   - container: /media/frigate
+#     host: /Users/you/frigate/media
+#
+# Tips:
+#   - List more-specific prefixes before less-specific ones.
+#   - Network sources (rtsp://, pipe:, -) are never path-remapped.
+#   - Arguments that don't start with a known prefix pass through unchanged.
+
+path_mappings:
+  # Volume mounts as declared in docker-compose.yml — order matters,
+  # more-specific prefixes must come before less-specific ones.
+  - container: /config
+    host: /Users/you/frigate/config
+  - container: /recordings
+    host: /Users/you/frigate/recordings
+  - container: /clips
+    host: /Users/you/frigate/clips
+  - container: /exports
+    host: /Users/you/frigate/exports
