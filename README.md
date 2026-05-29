@@ -11,6 +11,10 @@ Offload Frigate NVR's ffmpeg work to a native binary on the macOS host, gaining 
 
 - Name change from wrapper-coordinator and 
 
+![mactop](mactop.png)
+
+The above screenshot is with an oversized-model that doesn't fit on the ANE currently, but when the ANE is in use with the standard models the GPU usage disapears.
+
 ## How it works
 
 Frigate runs inside a Docker container and invokes ffmpeg for every camera stream. By pointing Frigate's `ffmpeg.path` at this proxy, every invocation is transparently forwarded over TCP to a lightweight daemon (`coordinator`) running natively on the host, which then execs the real ffmpeg binary.
