@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Compute tag name
+        id: version
+        run: echo "tag=build-$(date +'%Y%m%d')-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Build coordinator (darwin/arm64)
+        run: |
+          mkdir -p dist
+          GOOS=darwin GOARCH=arm64 go build -trimpath -ldflags="-s -w" \
+            -o dist/coordinator-darwin-arm64 ./cmd/coordinator
+
+      - name: Build wrapper (linux/amd64)
+        run: |
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" \
+            -o dist/wrapper-linux-amd64 ./cmd/wrapper
+
+      - name: Build wrapper (linux/arm64)
+        run: |
+          GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" \
+            -o dist/wrapper-linux-arm64 ./cmd/wrapper
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          prerelease: true
+          files: |
+            dist/coordinator-darwin-arm64
+            dist/wrapper-linux-amd64
+            dist/wrapper-linux-arm64

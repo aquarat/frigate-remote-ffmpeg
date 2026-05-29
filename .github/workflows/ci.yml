@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build coordinator (darwin/arm64)
+        run: GOOS=darwin GOARCH=arm64 go build -trimpath -ldflags="-s -w" -o /dev/null ./cmd/coordinator
+
+      - name: Build wrapper (linux/amd64)
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /dev/null ./cmd/wrapper
+
+      - name: Build wrapper (linux/arm64)
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /dev/null ./cmd/wrapper
