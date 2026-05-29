@@ -2,7 +2,7 @@
 dist/
 
 # Root-level compiled binary (produced by ad-hoc `go build` invocations)
-wrapper
+/wrapper
 
 # Local coordinator config (contains host-specific paths — use coordinator.yaml.example as a template)
 config/coordinator.yaml
