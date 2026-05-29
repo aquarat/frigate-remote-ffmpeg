@@ -3,8 +3,13 @@
 Offload Frigate NVR's ffmpeg work to a native binary on the macOS host, gaining access to **VideoToolbox** hardware-accelerated decoding without patching Frigate or its Docker image.
 
 ### Note 
-> This project has largely been vibe-coded; I've only done high-level reviews of the code in this repository... so here be dragons.
-> That said, this works _really_ well. I acquired an old Macbook M1 Pro 14" machine. It has limited RAM and limited storage... but as it turns out it's really good at running frigate with FFMpeg and ONNX/ANE-based object detection. With four 2.4k cameras it uses about 4w for both motion detction, object detection and recording. It's quite incredible. This repository enables that use case - without this code ffmpeg runs inside the frigate container, which means the CPU has to do all the video transcoding work. 
+> This project has largely been vibe-coded; I've only done high-level reviews of the code in this repository and I stipulated the architecture, but apart from that it's all YOLO AI... so here be dragons.
+> That said, this works _really_ well. I acquired an old Macbook M1 Pro 14" machine. It has limited RAM and limited storage... but as it turns out it's really good at running frigate with FFMpeg and ONNX/ANE-based object detection. With four 2.4k cameras it uses about 4w for both motion detction, object detection and recording. It's quite incredible. This repository enables that use case - without this code FFMpeg runs inside the frigate container, which means the CPU has to do all the video transcoding work. 
+> Of course running FFMpeg in a proper container setup on Linux would be first-class, but my attempts at reverse engineering the video accelerator co-processor on M1 were frustrating hah
+
+### WIP
+
+- Name change from wrapper-coordinator and 
 
 ## How it works
 
